@@ -1,5 +1,7 @@
 # vue-quiz
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/sudhir512kj/vue-quiz-app.svg)](https://greenkeeper.io/)
+
 > A Vue.js Quiz App<br>
     This app is currently in development mode.
 
