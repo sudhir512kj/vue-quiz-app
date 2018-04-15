@@ -1,7 +1,9 @@
 # vue-quiz
 
 > A Vue.js Quiz App<br>
-    This app is currently in development mode.
+    This is an quiz app where you can create, update and test quiz.<br>
+    Create and Update is for authenticated users only.<br>
+    You need to login using gmail.<br>
 
 ## Build Setup
 
