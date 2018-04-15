@@ -11,13 +11,14 @@ import {
     UPDATE_ANSWER,
     RESET_QUIZ,
     RESET_QUIZ_LIST,
-    PUSH_QUIZ
+    PUSH_QUIZ,
+    SET_QUIZ
 } from './mutations';
 
 const state = {
     newQuiz: {
         title: "Quiz 2018",
-        description: 100,
+        description: "An Awesome quiz",
         questions: [
             {
                 question: "First Question",
@@ -25,17 +26,28 @@ const state = {
                 answers: [
                     {
                         answer: "First answer"
+                    },
+                    {
+                        isRight: false,
+                        answer: "Second answer"
+                    },
+                    {
+                        isRight: false,
+                        answer: "Third answer"
                     }
                 ]
             }
         ]
     },
-    list: []
+    list: [],
+
+    quiz: null
 };
 
 const getters = {
     newQuiz: ({newQuiz}) => newQuiz,
-    list: ({list}) => list
+    list: ({list}) => list,
+    quiz: ({quiz}) => quiz
 };
 
 const mutations = {
@@ -88,17 +100,6 @@ const mutations = {
         }
     },
 
-    [REMOVE_ANSWER](state, payLoad) {
-        const questionIndex = payLoad.questionIndex;
-        const answerIndex = payLoad.answerIndex;
-
-        const question = state.newQuiz.questions[questionIndex];
-
-        if (question.answers.length > 1) {
-            question.answers.splice(answerIndex, 1);
-        }
-    },
-
     [UPDATE_ANSWER](state, payLoad) {
         const questionIndex = payLoad.questionIndex;
         const answerIndex = payLoad.answerIndex;
@@ -113,12 +114,27 @@ const mutations = {
         answer.answer = answerText;
     },
 
+    [REMOVE_ANSWER](state, payLoad) {
+        const questionIndex = payLoad.questionIndex;
+        const answerIndex = payLoad.answerIndex;
+
+        const question = state.newQuiz.questions[questionIndex];
+
+        if (question.answers.length > 1) {
+            question.answers.splice(answerIndex, 1);
+        }
+    },
+
     [PUSH_QUIZ](state, quiz) {
         state.list.push(quiz);
     },
 
     [RESET_QUIZ_LIST](state) {
         state.list = [];
+    },
+
+    [SET_QUIZ](state, quiz) {
+        state.quiz = quiz;
     }
 };
 
@@ -128,16 +144,40 @@ const actions = {
         const user = firebase.auth().currentUser;
         if (user) {
             // check if there is a question without a right answer
-            state.newQuiz.questions.map(question => {
+            // state.newQuiz.questions.map(question => {
+            //     let hasRightAnswer = false;
+
+            //     question.answers.map(answer => {
+            //         if (answer.isRight) hasRightAnswer = true;
+            //     });
+
+            //     if (!hasRightAnswer) {
+            //         alert(`Question: '${question.question}' doesn't have a right answer!!`);
+            //         throw new Error();
+            //     }
+            const quiz = state.newQuiz;
+
+            if (!quiz.title || !quiz.description)
+                throw new Error('Quiz information is required!');
+
+
+            if (quiz.questions.length == 0)
+                throw new Error('Quiz is empty!');
+
+            // check if there is a question without a right answer
+            quiz.questions.map(question => {
+                if (question.answers.length == 0) {
+                throw new Error(`Question: '${question.question}' doesn't have answers!`)
+                }
+
                 let hasRightAnswer = false;
 
                 question.answers.map(answer => {
-                    if (answer.isRight) hasRightAnswer = true;
+                if (answer.isRight) hasRightAnswer = true;
                 });
 
                 if (!hasRightAnswer) {
-                    alert(`Question: '${question.question}' doesn't have a right answer!!`);
-                    throw new Error();
+                throw new Error(`Question: '${question.question}' doesn't have a right answer selected!`)
                 }
             });
 
@@ -166,6 +206,17 @@ const actions = {
                 }
             });
         });
+    },
+
+    async get({commit}, id) {
+        const quiz = await db.collection('quizes').doc(id).get();
+    
+        if (quiz.exists) {
+          commit(SET_QUIZ, {
+            id: quiz.id,
+            ...quiz.data()
+          });
+        }
     }
 
 };

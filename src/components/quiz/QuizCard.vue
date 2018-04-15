@@ -1,5 +1,5 @@
 <template>
-  <v-flex xs12 sm6 md6 x12 class="pa-2">
+  <v-flex xs12 sm6 md4 x12 class="pa-2">
       <v-card :color="randomColor()" class="white--text">
           <v-card-title primary-title>
               <div class="headline">{{title}}</div>
