@@ -17,23 +17,24 @@ import {
 
 const state = {
     newQuiz: {
-        title: "Quiz 2018",
-        description: "An Awesome quiz",
+        title: "First Quiz",
+        description: "Superr Quiz",
         questions: [
             {
-                question: "First Question",
-                points: "First Points",
+                question: "Question One",
+                points: "Points",
                 answers: [
                     {
-                        answer: "First answer"
+                        isRight: true,
+                        answer: "Answer one"
                     },
                     {
                         isRight: false,
-                        answer: "Second answer"
+                        answer: "Answer one"
                     },
                     {
                         isRight: false,
-                        answer: "Third answer"
+                        answer: "Answer one"
                     }
                 ]
             }
@@ -142,19 +143,8 @@ const actions = {
 
     async create({state}) {
         const user = firebase.auth().currentUser;
+        // To validate quiz
         if (user) {
-            // check if there is a question without a right answer
-            // state.newQuiz.questions.map(question => {
-            //     let hasRightAnswer = false;
-
-            //     question.answers.map(answer => {
-            //         if (answer.isRight) hasRightAnswer = true;
-            //     });
-
-            //     if (!hasRightAnswer) {
-            //         alert(`Question: '${question.question}' doesn't have a right answer!!`);
-            //         throw new Error();
-            //     }
             const quiz = state.newQuiz;
 
             if (!quiz.title || !quiz.description)
@@ -164,7 +154,6 @@ const actions = {
             if (quiz.questions.length == 0)
                 throw new Error('Quiz is empty!');
 
-            // check if there is a question without a right answer
             quiz.questions.map(question => {
                 if (question.answers.length == 0) {
                 throw new Error(`Question: '${question.question}' doesn't have answers!`)
@@ -181,7 +170,7 @@ const actions = {
                 }
             });
 
-            // save to database
+            // To save quiz
             await db.collection('quizes').add({
                 ...state.newQuiz,
                 userId: user.uid
