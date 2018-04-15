@@ -1,6 +1,6 @@
 <template functional>
   <v-toolbar app dark color="primary">
-      <v-toolbar-title class="white--text ml-5">Vue PWA</v-toolbar-title>
+      <v-toolbar-title class="white--text ml-5">Quizooo</v-toolbar-title>
       <v-spacer />
 
       <v-menu 

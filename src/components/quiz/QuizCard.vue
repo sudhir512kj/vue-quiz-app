@@ -7,7 +7,7 @@
           <v-card-text>{{description}}</v-card-text>
 
           <v-card-actions>
-              <v-btn flat dark :to="`/quiz/${id}`">Take it now</v-btn>
+              <v-btn flat dark :to="`/quiz/${id}`">Take  it  now</v-btn>
           </v-card-actions>
       </v-card>
   </v-flex>
